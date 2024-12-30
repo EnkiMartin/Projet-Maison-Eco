@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factures du Logement</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        header {
+            background-color: #4682b4;
+            width: 100%;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+            font-size: 1.5rem;
+            position: sticky;
+            top: 0;
+        }
+
+        main {
+            margin: 20px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .input-container {
+            margin-bottom: 20px;
+        }
+
+        select, button {
+            padding: 10px;
+            margin: 5px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        select:focus, button:focus {
+            outline: none;
+            border-color: #4682b4;
+        }
+
+        .factures-list {
+            margin: 20px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .facture-item {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .facture-item span {
+            font-size: 1rem;
+        }
+
+        .error {
+            color: red;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .total {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <span>Factures du Logement</span>
+    </header>
+    <main>
+        <h1>Factures</h1>
+        <div class="input-container">
+            <label for="logement-select">Sélectionnez un logement :</label>
+            <select id="logement-select">
+                <!-- Options des logements générées dynamiquement -->
+            </select>
+            <button id="fetch-factures">Afficher les factures</button>
+        </div>
+        <div id="factures-list" class="factures-list">
+            <!-- Factures insérées ici -->
+        </div>
+        <div id="total" class="total"></div>
+        <div id="error" class="error"></div>
+    </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const logementSelect = document.getElementById('logement-select');
+            const fetchButton = document.getElementById('fetch-factures');
+            const facturesListDiv = document.getElementById('factures-list');
+            const totalDiv = document.getElementById('total');
+            const errorDiv = document.getElementById('error');
+
+            try {
+                // Fetch logements
+                const logementResponse = await fetch('http://127.0.0.1:8000/logements');
+                if (!logementResponse.ok) throw new Error('Erreur lors de la récupération des logements.');
+
+                const logements = await logementResponse.json();
+
+                // Remplir le menu déroulant avec les adresses
+                logements.forEach(logement => {
+                    const option = document.createElement('option');
+                    option.value = logement.id;
+                    option.textContent = logement.adresse;
+                    logementSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error(error);
+                errorDiv.textContent = "Erreur lors de la récupération des logements.";
+                return;
+            }
+
+            // Événement sur le bouton pour afficher les factures
+            fetchButton.addEventListener('click', async () => {
+                const logementId = parseInt(logementSelect.value);
+                facturesListDiv.innerHTML = '';
+                totalDiv.textContent = '';
+                errorDiv.textContent = '';
+
+                if (!logementId) {
+                    errorDiv.textContent = "Veuillez sélectionner un logement.";
+                    return;
+                }
+
+                try {
+                    // Fetch all factures
+                    const response = await fetch('http://127.0.0.1:8000/factures');
+                    if (!response.ok) throw new Error('Erreur lors de la récupération des factures.');
+
+                    const allFactures = await response.json();
+
+                    // Filter factures by logement_id
+                    const factures = allFactures.filter(facture => facture.logement_id === logementId);
+
+                    if (factures.length === 0) {
+                        errorDiv.textContent = "Aucune facture trouvée pour ce logement.";
+                        return;
+                    }
+
+                    // Display factures
+                    let totalAmount = 0;
+                    factures.forEach(facture => {
+                        const factureDiv = document.createElement('div');
+                        factureDiv.className = 'facture-item';
+
+                        factureDiv.innerHTML = `
+                            <span>Facture ID: ${facture.id}</span>
+                            <span>Montant: ${facture.montant}€</span>
+                            <span>Date: ${facture.date}</span>
+                        `;
+
+                        totalAmount += facture.montant;
+                        facturesListDiv.appendChild(factureDiv);
+                    });
+
+                    // Display total
+                    totalDiv.textContent = `Total des Montants: ${totalAmount}€`;
+
+                } catch (error) {
+                    console.error(error);
+                    errorDiv.textContent = "Une erreur est survenue. Veuillez réessayer.";
+                }
+            });
+        });
+    </script>
+</body>
+</html>
