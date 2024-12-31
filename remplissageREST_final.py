@@ -129,7 +129,7 @@ async def get_factures():
     conn.close()
     return factures
 
-# à changer, marchait jeudi
+# à changer, marchait jeudi ----- UPDATE, plus besoin, mais inutile parce que jamais utilisée
 @app.get("/meteo/{ville}", response_class=HTMLResponse)
 async def previsions_meteo(ville: str, request: Request):
     """
@@ -499,22 +499,6 @@ async def delete_logement(logement_id: int):
 
     return {"message": "Logement supprimé avec succès"}
 
-@app.delete("/logements/{logement_id}", response_model=dict)
-async def delete_logement(logement_id: int):
-    """Supprimer un logement."""
-    conn = get_db_connection()
-    c = conn.cursor()
-
-    try:
-        c.execute("DELETE FROM Logement WHERE id = %s", (logement_id,))
-        if c.rowcount == 0:
-            raise HTTPException(status_code=404, detail=f"Logement avec id {logement_id} introuvable.")
-        conn.commit()
-    finally:
-        conn.close()
-
-    return {"message": "Logement supprimé avec succès"}
-
 @app.delete("/pieces/{piece_id}", response_model=dict)
 async def delete_piece(piece_id: int):
     """Supprimer une pièce."""
@@ -615,6 +599,11 @@ async def newPieces(request: Request):
 async def about(request: Request):
     """Page 'Leaderboard'."""
     return templates.TemplateResponse("leaderboard.html", {"request": request, "title": "Leaderboard"})
+
+@app.get("/newCapteur", response_class=HTMLResponse)
+async def about(request: Request):
+    """Page 'Capteur / Actionneur'."""
+    return templates.TemplateResponse("newCapteur.html", {"request": request, "title": "Capteur / Actionneur"})
 
 # Lancement du serveur
 if __name__ == "__main__":

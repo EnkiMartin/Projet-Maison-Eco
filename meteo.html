@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prévisions météo - {{ ville }}</title>
+</head>
+<body>
+    <h1>Prévisions météo pour {{ ville }}</h1>
+    <ul>
+        {% for ligne in meteo_data %}
+            <li>{{ ligne }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des Logements</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #d4f4dd;
+            color: #2d6247;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            text-align: center;
+            padding-top: 60px;
+        }
+
+        .menu {
+            position: relative;
+            display: inline-block;
+        }
+
+        .menu-button {
+            background-color: #66bb6a;
+            color: white;
+            padding: 10px 15px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .menu-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .menu-content a {
+            color: #2d6247;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .menu-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .menu:hover .menu-content {
+            display: block;
+        }
+
+        header {
+            width: 100%;
+            padding: 10px;
+            background-color: #81c784;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        header h2 {
+            color: white;
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        main {
+            margin: 20px 0;
+            padding: 40px;
+            width: 90%;
+            max-width: 1200px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 40px;
+        }
+
+        .house-icon {
+            width: 150px;
+            height: 150px;
+            background-color: #81c784;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            font-size: 4rem;
+            color: white;
+        }
+
+        .house-icon:hover {
+            transform: scale(1.2);
+        }
+
+        .house-address {
+            margin-top: 10px;
+            font-size: 1rem;
+            color: #2d6247;
+            text-align: center;
+            width: 150px;
+            word-wrap: break-word;
+        }
+
+        .house-info {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(50, 50, 50, 0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+            font-size: 1.2rem;
+            line-height: 1.4;
+            width: 250px;
+            text-align: left;
+            z-index: 2;
+        }
+
+        .house-icon:hover .house-info {
+            display: block;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 10px;
+            font-size: 0.9rem;
+            color: #517760;
+            background-color: #81c784;
+            width: 100%;
+            text-align: center;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: left;
+            width: 400px;
+        }
+
+        .modal-content label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .modal-content button {
+            background-color: #81c784;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .modal-content button:hover {
+            background-color: #66bb6a;
+        }
+
+        #back-home-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            background-color: #66bb6a;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        #back-home-btn:hover {
+            background-color: #81c784;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="menu">
+            <button class="menu-button">☰ Menu</button>
+            <div class="menu-content">
+                <a href="/">Accueil</a>
+                <a href="http://127.0.0.1:8000/ressources">Ressources</a>
+                <a href="http://127.0.0.1:8000/about">À propos</a>
+            </div>
+        </div>
+        <h2>Liste des Logements</h2>
+    </header>
+    <main id="logements-container">
+        <!-- Les icônes de maison seront insérées ici via JavaScript -->
+    </main>
+    <a id="back-home-btn" href="/">Retour à l'accueil</a>
+    <footer>&copy; 2024 - Éco-Logement. Prenez soin de la planète et de votre maison.</footer>
+
+    <div id="add-house-modal" class="modal">
+        <div class="modal-content">
+            <h2>Ajouter une Nouvelle Maison</h2>
+            <label for="id">ID</label>
+            <input type="number" id="id" placeholder="Entrez l'ID" required>
+            <label for="adresse">Adresse</label>
+            <input type="text" id="adresse" placeholder="Entrez l'adresse" required>
+            <label for="adresse-ip">Adresse IP</label>
+            <input type="text" id="adresse-ip" placeholder="Entrez l'adresse IP" required>
+            <label for="telephone">Téléphone</label>
+            <input type="text" id="telephone" placeholder="Entrez le numéro de téléphone" required>
+            <button id="submit-house">Ajouter</button>
+            <button id="close-modal">Annuler</button>
+        </div>
+    </div>
+
+    <script>
+        async function fetchLogements() {
+            try {
+                const response = await fetch('http://127.0.0.1:8000/logements');
+                if (!response.ok) {
+                    throw new Error('Erreur de chargement des logements');
+                }
+                const logements = await response.json();
+
+                const container = document.getElementById('logements-container');
+                container.innerHTML = ''; // Clear existing content
+
+                logements.forEach(logement => {
+                    const houseContainer = document.createElement('div');
+                    houseContainer.style.textAlign = "center";
+
+                    const iconContainer = document.createElement('div');
+                    iconContainer.classList.add('house-icon');
+
+                    const icon = document.createElement('span');
+                    icon.textContent = '🏠'; // Icône Unicode
+
+                    const houseInfo = document.createElement('div');
+                    houseInfo.classList.add('house-info');
+                    houseInfo.innerHTML = `
+                        ID: ${logement.id}<br>
+                        Adresse IP: ${logement.adresseip}<br>
+                        Téléphone: ${logement.telephone}<br>
+                        Date d'ajout: ${new Date(logement.date_insert).toLocaleString('fr-FR')}
+                    `;
+
+                    iconContainer.appendChild(icon);
+                    iconContainer.appendChild(houseInfo);
+
+                    const addressElement = document.createElement('div');
+                    addressElement.classList.add('house-address');
+                    addressElement.textContent = logement.adresse;
+
+                    iconContainer.addEventListener('click', () => {
+                        window.location.href = `http://127.0.0.1:8000/newPieces?id=${logement.id}`;
+                    });
+
+                    houseContainer.appendChild(iconContainer);
+                    houseContainer.appendChild(addressElement);
+
+                    container.appendChild(houseContainer);
+                });
+
+                // Ajouter la case "+ Nouvelle Maison"
+                const newHouseIcon = document.createElement('div');
+                newHouseIcon.classList.add('house-icon');
+                newHouseIcon.style.backgroundColor = '#b3e5fc';
+                newHouseIcon.textContent = '+';
+                newHouseIcon.addEventListener('click', openAddHouseModal);
+
+                container.appendChild(newHouseIcon);
+
+                // Ajouter la case rouge "-" pour supprimer un logement
+                const deleteHouseIcon = document.createElement('div');
+                deleteHouseIcon.classList.add('house-icon');
+                deleteHouseIcon.style.backgroundColor = '#ff8a80';
+                deleteHouseIcon.textContent = '-';
+                deleteHouseIcon.addEventListener('click', openDeleteHouseModal);
+
+                container.appendChild(deleteHouseIcon);
+
+            } catch (error) {
+                console.error('Erreur:', error);
+                const container = document.getElementById('logements-container');
+                container.innerHTML = '<p>Impossible de charger les logements.</p>';
+            }
+        }
+
+        function openAddHouseModal() {
+            document.getElementById('add-house-modal').style.display = 'flex';
+        }
+
+        async function openDeleteHouseModal() {
+            const idToDelete = prompt('Entrez l\'ID du logement à supprimer :');
+            if (!idToDelete) {
+                return alert('ID non fourni.');
+            }
+
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/logements/${idToDelete}`, {
+                    method: 'DELETE',
+                });
+
+                if (!response.ok) throw new Error('Erreur lors de la suppression du logement.');
+
+                alert('Logement supprimé avec succès.');
+                fetchLogements(); 
+            } catch (error) {
+                console.error(error);
+                alert('Erreur lors de la suppression du logement.');
+            }
+        }
+
+        document.getElementById('close-modal').addEventListener('click', () => {
+            document.getElementById('add-house-modal').style.display = 'none';
+        });
+
+        document.getElementById('submit-house').addEventListener('click', async () => {
+            const id = document.getElementById('id').value;
+            const adresse = document.getElementById('adresse').value;
+            const adresseIp = document.getElementById('adresse-ip').value;
+            const telephone = document.getElementById('telephone').value;
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/logements', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        "id": id,
+                        "adresse": adresse,
+                        "adresse_ip": adresseIp,
+                        "telephone": telephone
+                    }),
+                });
+                if (!response.ok) throw new Error('Erreur lors de l’ajout du logement');
+                alert('Logement ajouté avec succès');
+                fetchLogements(); // Recharger la liste
+                document.getElementById('add-house-modal').style.display = 'none';
+            } catch (error) {
+                console.error(error);
+                alert('Erreur lors de l’ajout du logement');
+            }
+        });
+
+        // Charger les logements au démarrage
+        fetchLogements();
+    </script>
+</body>
+</html>
