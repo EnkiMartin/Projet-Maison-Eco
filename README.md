@@ -1,5 +1,4 @@
-ATTENTION : J'AI ENVOYE LES MAUVAIS FICHIERS LE JOUR DU RENDU, vOUS ÊTES DEVANT LA VERSION COMMIT LE LENDEMAIN A 7H30
-J'AURAIS SÛREMENT ENVOYE UN MAIL A MONSIEUR HILAIRE POUR M'EXPLIQUER PLUS EN DETAIL
+ATTENTION : J'AI ENVOYE LES MAUVAIS FICHIERS LE JOUR DU RENDU, VOUS ÊTES DEVANT LA VERSION COMMIT LE LENDEMAIN A 7H30
 
 Voici le compte-rendu de mon projet. Un read me était demandé, je vais donc parler des spécificités de ce projet.
 Tout d'abord, je souhaite pointer du doigt le fait que le front end est loin d'être parfait.
