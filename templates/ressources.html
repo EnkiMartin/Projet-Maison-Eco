@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ressources</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #d4f4dd;
+            color: #2d6247;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            height: 100vh;
+            text-align: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        header {
+            width: 100%;
+            padding: 10px;
+            background-color: #81c784;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10;
+        }
+
+        .menu {
+            position: relative;
+            display: inline-block;
+        }
+
+        .menu-button {
+            background-color: #66bb6a;
+            color: white;
+            padding: 10px 15px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .menu-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .menu-content a {
+            color: #2d6247;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .menu-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .menu:hover .menu-content {
+            display: block;
+        }
+
+        header h1 {
+            color: white;
+            margin-right: 20px;
+        }
+
+        main {
+            margin-top: 70px;
+            padding: 20px;
+            max-width: 800px;
+        }
+
+        main .resource {
+            margin-bottom: 30px;
+        }
+
+        main .resource p {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #81c784;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #66bb6a;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="menu">
+            <button class="menu-button">☰ Menu</button>
+            <div class="menu-content">
+                <a href="/">Accueil</a>
+                <a href="http://127.0.0.1:8000/ressources">Ressources</a>
+                <a href="http://127.0.0.1:8000/about">À propos</a>
+            </div>            
+        </div>
+        <h1>Ressources</h1>
+    </header>
+    <main>
+        <div class="resource">
+            <p>ChatGPT : Un assistant qui m'a permis de gagner du temps et de mieux comprendre certaines erreurs.</p>
+            <a href="https://chat.openai.com/" class="btn" target="_blank">Visiter ChatGPT</a>
+        </div>
+        <div class="resource">
+            <p>Neon.tech : Un outil utilisé pour visualiser la base de données de manière plus claire et intuitive.</p>
+            <a href="https://console.neon.tech/app/projects" class="btn" target="_blank">Visiter Neon.tech</a>
+        </div>
+        <div class="resource">
+            <p>YouTube : Des tutoriels qui m'ont aidé dans ce projet. Voici deux chaînes particulièrement utiles :</p>
+            <a href="https://www.youtube.com/@codefacileWK" class="btn" target="_blank">Voir CodeFacileWK</a>
+            <a href="https://www.youtube.com/@bandedecodeurs" class="btn" target="_blank">Voir Bandedecodeurs</a>
+        </div>
+        <div class="resource">
+            <p>wttr.in : Un service pour récupérer la météo. Malheureusement, il ne fonctionne pas tout le temps (down le 29/12/2024).</p>
+            <a href="https://wttr.in/Paris?format=v2&lang=fr&format=%l:+%c+%t" class="btn" target="_blank">Voir wttr.in</a>
+        </div>
+        <div class="resource">
+            <p>Un projet GitHub déjà fait par un autre, il m'a suffit de copier-coller.</p>
+            <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="btn" target="_blank">Voir le projet GitHub</a>
+        </div>
+    </main>
+</body>
+</html>
